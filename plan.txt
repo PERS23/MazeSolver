@@ -1,0 +1,43 @@
+What the animation needs:
+
+    - A series of images to serve as key frames, each progressively has the maze explored more
+
+Maze Class:
+
+    - Strategy pattern for selecting the maze build algorithm.
+    - Builds new random maze
+    - Maze represented by a 2d array of cells, each with boolean variables for NESW walls.
+
+Graph Factory:
+
+    - Given a maze maze class, build a graph with vertices and edges having corresponding x/y points on the 2d array
+     of cells.
+    - vertices at intersections/corners
+
+Maze Solver:
+
+    - Strategy pattern : Given a graph, select the algorithm to solve it e.g. DFS, BFS, Djikstra etc.
+    - Return not just the correct path edge list, but also a queue of all the edges it considered.
+
+Animation Builder:
+
+    - Builder pattern
+        - Constructed with a base maze class
+
+        - Creates a current image from the base (specifying wall width, corridor width, colors etc)
+
+        - When it is fed an edge from the maze solver queue, it locates the corresponding cells to highlight on the
+          current image and highlights them.
+            - Possibility for further abstraction where the edge is split up into a list of singular points and the build
+            function returns not a single image but a list of images from the edge.
+
+        - After fed an edge it will return a copy of the current image, use these images as keyframes for an animation.
+
+        * Adv here is that I'm taking the image creation out of the maze class and I'm not having to create new images constantly
+          I'm only updating 1 current image and returning a copy
+
+        - Final section of the edge queue is the correct path edge list and this draws the correct path
+
+    - Playback speed done by controlling timeline speed
+
+    - Can now return a gif of the solution since we have all the keyframes.
