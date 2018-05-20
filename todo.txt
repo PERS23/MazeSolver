@@ -1,2 +1,3 @@
 todo:
 
+- Research and implement strategy pattern for use in Maze Generation Algorithm
