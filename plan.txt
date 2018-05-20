@@ -19,7 +19,7 @@ Maze Class:
 
 Graph Factory:
 
-    - Given a maze maze class, build a graph with vertices and edges having corresponding x/y points on the 2d array
+    - Given a maze class, build a graph with vertices and edges having corresponding x/y points on the 2d array
      of cells.
     - vertices at intersections/corners
 

@@ -1,4 +1,4 @@
-package github.com.PERS23;
+package github.com.PERS23.MazeSolver;
 
 public enum Direction {
     NORTH(0, 0, -1),

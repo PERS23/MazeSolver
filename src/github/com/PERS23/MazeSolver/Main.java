@@ -1,4 +1,4 @@
-package github.com.PERS23;
+package github.com.PERS23.MazeSolver;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
