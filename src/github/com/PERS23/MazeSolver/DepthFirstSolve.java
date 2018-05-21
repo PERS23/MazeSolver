@@ -35,8 +35,8 @@ public class DepthFirstSolve implements SolvingStrategy {
             for (Direction choice : Direction.values()) {
                 if (!mCurrentMaze.isWall(currentPoint.x, currentPoint.y, choice)) {
 
-                    Point oppositePoint = new Point(currentPoint.x + choice.getX(),
-                                                    currentPoint.y + choice.getY());
+                    Point oppositePoint = new Point(currentPoint.x + choice.getDX(),
+                                                    currentPoint.y + choice.getDY());
 
                     if (mCurrentMaze.isWithinBounds(oppositePoint.x, oppositePoint.y) &&
                         !mVisited[oppositePoint.y][oppositePoint.x]) {

@@ -1,13 +1,10 @@
 package github.com.PERS23.MazeSolver;
 
-import java.util.Random;
-
 public class Maze {
 
     private MazeCell[][] mLabyrinth; // [row][col], [y][x]
 
-    public static Maze randomMaze(int width, int height) {
-        GenerationStrategy generator = new RecursiveBacktrack();
+    public static Maze randomMaze(int width, int height, GenerationStrategy generator) {
         return generator.generateRandomMaze(width, height);
     }
 
@@ -33,9 +30,9 @@ public class Maze {
     }
 
     public void carveWall(int x, int y, Direction choice) {
-        if (isWithinBounds(x + choice.getX(), y + choice.getY())) {
+        if (isWithinBounds(x + choice.getDX(), y + choice.getDY())) {
             mLabyrinth[y][x].carve(choice);
-            mLabyrinth[y + choice.getY()][x + choice.getX()].carve(choice.opposite());
+            mLabyrinth[y + choice.getDY()][x + choice.getDX()].carve(choice.opposite());
         }
     }
 

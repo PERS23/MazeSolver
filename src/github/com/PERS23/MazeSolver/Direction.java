@@ -7,25 +7,25 @@ public enum Direction {
     WEST(3, -1, 0);
 
     private int mWallIndex;
-    private int x;
-    private int y;
+    private int dx;
+    private int dy;
 
-    private Direction(int wallIndex, int x, int y) {
+    private Direction(int wallIndex, int dx, int dy) {
         mWallIndex = wallIndex;
-        this.x = x;
-        this.y = y;
+        this.dx = dx;
+        this.dy = dy;
     }
 
     public int getWallIndex() {
         return mWallIndex;
     }
 
-    public int getX() {
-        return x;
+    public int getDX() {
+        return dx;
     }
 
-    public int getY() {
-        return y;
+    public int getDY() {
+        return dy;
     }
 
     public Direction opposite() {
