@@ -38,4 +38,8 @@ public class Maze {
             mLabyrinth[y + choice.getY()][x + choice.getX()].carve(choice.opposite());
         }
     }
+
+    public boolean isWall(int x, int y, Direction choice) {
+        return mLabyrinth[y][x].isWall(choice);
+    }
 }

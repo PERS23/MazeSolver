@@ -4,9 +4,9 @@ import java.util.Random;
 
 public class RecursiveBacktrack implements GenerationStrategy {
 
+    private Maze mCurrentMaze;
     private boolean[][] mVisited;
     private Random mRandomGenerator;
-    private Maze mCurrentMaze;
 
     @Override
     public Maze generateRandomMaze(int width, int height) {
