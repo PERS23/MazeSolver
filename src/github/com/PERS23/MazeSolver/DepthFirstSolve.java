@@ -11,13 +11,13 @@ public class DepthFirstSolve implements SolvingStrategy {
     private List<Point> mAllPathsTaken = new LinkedList<>();
 
     @Override
-    public void solve(Maze target, int startX, int startY, int endX, int endY) {
+    public void solve(Maze target, Point start, Point end) {
         mCurrentMaze = target;
         mVisited = new boolean[mCurrentMaze.getHeight()][mCurrentMaze.getWidth()];
         mSolutionPath.clear();
         mAllPathsTaken.clear();
 
-        DFS(new Point(startX, startY), new Point(endX, endY));
+        DFS(start, end);
     }
 
     private void DFS(Point start, Point end) {

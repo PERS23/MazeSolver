@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface SolvingStrategy {
 
-    public void solve(Maze target, int startX, int startY, int endX, int endY);
+    public void solve(Maze target, Point start, Point end);
 
     /**
      * Returns the list of X/Y points in order that must be taken to get from the start to the end.

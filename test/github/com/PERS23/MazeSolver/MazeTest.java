@@ -20,10 +20,10 @@ public class MazeTest {
     @TestInJfxThread
     public void test() {
         Maze instance = Maze.randomMaze(20, 20, new RecursiveBacktrack());
-        AnimationBuilder imager = new AnimationBuilder(instance);
+        AnimationBuilder imager = new AnimationBuilder(instance, 8, 16);
 
         SolvingStrategy solver = new DepthFirstSolve();
-        solver.solve(instance, 0, 0, 19, 19);
+        solver.solve(instance, new Point(0,0), new Point(19,19));
 
         imager.highlight(0, 0);
         for (Point p : solver.getSolutionPath()) {
