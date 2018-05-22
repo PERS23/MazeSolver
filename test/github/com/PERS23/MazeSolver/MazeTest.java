@@ -19,11 +19,11 @@ public class MazeTest {
     @Test
     @TestInJfxThread
     public void test() {
-        Maze instance = Maze.randomMaze(50, 50, new RecursiveBacktrack());
+        Maze instance = Maze.randomMaze(20, 20, new RecursiveBacktrack());
         AnimationBuilder imager = new AnimationBuilder(instance);
 
         SolvingStrategy solver = new DepthFirstSolve();
-        solver.solve(instance, 0, 0, 49, 49);
+        solver.solve(instance, 0, 0, 19, 19);
 
         imager.highlight(0, 0);
         for (Point p : solver.getSolutionPath()) {
