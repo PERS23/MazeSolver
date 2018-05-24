@@ -6,11 +6,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("MainUI.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        Parent root = fxmlLoader.load(getClass().getResource("MainUI.fxml"), ResourceBundle.getBundle("values/strings", Locale.ENGLISH));
         primaryStage.setTitle("MazeSolver");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();

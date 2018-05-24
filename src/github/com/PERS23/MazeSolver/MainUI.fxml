@@ -1,17 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane fx:controller="github.com.PERS23.MazeSolver.Controller" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="github.com.PERS23.MazeSolver.Controller">
 <top>
     <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
-            <Button fx:id="new_maze_button" mnemonicParsing="false" text="New Maze"/>
-            <Button fx:id="solve_maze_button" mnemonicParsing="false" text="Solve Maze"/>
+            <ComboBox fx:id="gen_choices" prefWidth="150.0" />
+            <Button fx:id="new_maze_button" mnemonicParsing="false" onAction="#handleNewMazeButton" text="%new_maze_button_text" />
+            <Separator orientation="VERTICAL" />
+            <ComboBox fx:id="solve_choices" prefWidth="150.0" />
+            <Button fx:id="solve_maze_button" mnemonicParsing="false" onAction="#handleSolveMazeButton" text="%solve_maze_button_text" />
+            <Separator orientation="VERTICAL" />
+            <Button fx:id="settings_button" mnemonicParsing="false" text="%settings_button_text" />
         </items>
     </ToolBar>
 </top>
+   <bottom>
+      <VBox spacing="8.0" BorderPane.alignment="CENTER">
+         <padding>
+              <Insets bottom="8" left="8" right="8" top="8" />
+         </padding>
+         <children>
+            <HBox fx:id="playback_controls" alignment="CENTER" spacing="8.0">
+               <children>
+                  <Button fx:id="step_backward" mnemonicParsing="false" />
+                  <Button fx:id="stop" mnemonicParsing="false" onAction="#stopAnimation"/>
+                  <Button fx:id="play_pause" mnemonicParsing="false" onAction="#togglePlayPause"/>
+                  <Button fx:id="step_forward" mnemonicParsing="false" />
+               </children>
+            </HBox>
+            <HBox fx:id="speed_controls" alignment="CENTER" spacing="16.0">
+               <children>
+                  <Label text="%placement_speed_label" />
+                  <Slider/>
+                  <Label />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </bottom>
 </BorderPane>

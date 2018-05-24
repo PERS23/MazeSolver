@@ -41,12 +41,15 @@ public class AnimationBuilder {
                 unhighlight(x, y);
             }
         }
-
     }
 
     public void highlight(int x, int y) {
-        mHighlighted[y][x] = true;
-        fillCell(x, y, mHighlightColor);
+        if (mHighlighted[y][x] == true) {
+            fillCell(x, y, mSolveColor);
+        } else {
+            mHighlighted[y][x] = true;
+            fillCell(x, y, mHighlightColor);
+        }
     }
 
     public void unhighlight(int x, int y) {

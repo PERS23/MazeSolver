@@ -11,7 +11,7 @@ public class MazeSolvingService extends Service<Pair<List<Point>, List<Point>>> 
 
     private Point mStartPoint, mEndPoint;
     private Maze mTarget;
-    private SolvingStrategy mSolver;
+    private SolvingStrategyPolicy mStrategyChoice;
 
     public Maze getTarget() {
         return mTarget;
@@ -21,12 +21,12 @@ public class MazeSolvingService extends Service<Pair<List<Point>, List<Point>>> 
         mTarget = target;
     }
 
-    public SolvingStrategy getSolver() {
-        return mSolver;
+    public SolvingStrategyPolicy getStrategyChoice() {
+        return mStrategyChoice;
     }
 
-    public void setSolver(SolvingStrategy solver) {
-        mSolver = solver;
+    public void setStrategyChoice(SolvingStrategyPolicy strategyChoice) {
+        mStrategyChoice = strategyChoice;
     }
 
     public void setPoints(Point startPoint, Point endPoint) {
@@ -45,14 +45,13 @@ public class MazeSolvingService extends Service<Pair<List<Point>, List<Point>>> 
     @Override
     protected Task<Pair<List<Point>, List<Point>>> createTask() {
         final Maze target = getTarget();
-        final SolvingStrategy solver = getSolver();
+        final SolvingStrategyPolicy strategy = getStrategyChoice();
         final Point start = getStartPoint(), end = getEndPoint();
 
         return new Task<Pair<List<Point>, List<Point>>>() {
             @Override
             protected Pair<List<Point>, List<Point>> call() throws Exception {
-                solver.solve(target, start, end);
-                return new Pair<>(solver.getAllPathsTaken(), solver.getSolutionPath());
+                return strategy.getSolver().solve(target, start, end);
             }
         };
     }

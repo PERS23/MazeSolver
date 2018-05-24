@@ -3,7 +3,7 @@ package github.com.PERS23.MazeSolver;
 import java.awt.Point;
 import java.util.*;
 
-public class RecursiveBacktrack implements GenerationStrategy {
+public class RecursiveBacktrack implements GenStrategy {
 
     private Maze mCurrentMaze;
     private boolean[][] mVisited;

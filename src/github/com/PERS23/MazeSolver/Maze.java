@@ -4,8 +4,8 @@ public class Maze {
 
     private MazeCell[][] mLabyrinth; // [row][col], [y][x]
 
-    public static Maze randomMaze(int width, int height, GenerationStrategy generator) {
-        return generator.generateRandomMaze(width, height);
+    public static Maze randomMaze(int width, int height, GenStrategyPolicy generatorType) {
+        return generatorType.getGenerator().generateRandomMaze(width, height);
     }
 
     public Maze(int width, int height) {

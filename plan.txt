@@ -35,7 +35,7 @@ Animation Builder:
 
         - Creates a current image from the base (specifying wall width, corridor width, colors etc)
 
-        - When it is fed an edge from the maze solver queue, it locates the corresponding cells to highlight on the
+        - When it is fed an edge from the maze strategyChoice queue, it locates the corresponding cells to highlight on the
           current image and highlights them.
             - Possibility for further abstraction where the edge is split up into a list of singular points and the build
             function returns not a single image but a list of images from the edge.

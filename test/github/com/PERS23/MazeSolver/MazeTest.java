@@ -19,23 +19,5 @@ public class MazeTest {
     @Test
     @TestInJfxThread
     public void test() {
-        Maze instance = Maze.randomMaze(20, 20, new RecursiveBacktrack());
-        AnimationBuilder imager = new AnimationBuilder(instance, 8, 16);
-
-        SolvingStrategy solver = new DepthFirstSolve();
-        solver.solve(instance, new Point(0,0), new Point(19,19));
-
-        imager.highlight(0, 0);
-        for (Point p : solver.getSolutionPath()) {
-            imager.highlight(p.x, p.y);
-        }
-
-        File file = new File("CanvasImage.png");
-
-        try {
-            ImageIO.write(SwingFXUtils.fromFXImage(imager.getImage(), null), "png", file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

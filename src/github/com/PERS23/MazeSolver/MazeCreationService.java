@@ -5,16 +5,16 @@ import javafx.concurrent.Task;
 
 public class MazeCreationService extends Service<Maze> {
 
-    private GenerationStrategy mMazeGenerator;
+    private GenStrategyPolicy mStrategyChoice;
     private int mWidth;
     private int mHeight;
 
-    public GenerationStrategy getMazeGenerator() {
-        return mMazeGenerator;
+    public GenStrategyPolicy getStrategyChoice() {
+        return mStrategyChoice;
     }
 
-    public void setMazeGenerator(GenerationStrategy mazeGenerator) {
-        mMazeGenerator = mazeGenerator;
+    public void setStrategyChoice(GenStrategyPolicy strategyChoice) {
+        mStrategyChoice = strategyChoice;
     }
 
     public int getWidth() {
@@ -35,13 +35,13 @@ public class MazeCreationService extends Service<Maze> {
 
     @Override
     protected Task<Maze> createTask() {
-        final GenerationStrategy mazeGenerator = getMazeGenerator();
+        final GenStrategyPolicy strategyChoice = mStrategyChoice;
         final int width = getWidth(), height = getHeight();
 
         return new Task<Maze>() {
             @Override
             protected Maze call() throws Exception {
-                return Maze.randomMaze(width, height, mazeGenerator);
+                return Maze.randomMaze(width, height, strategyChoice);
             }
         };
     }
