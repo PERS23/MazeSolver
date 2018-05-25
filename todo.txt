@@ -12,4 +12,4 @@ todo:
 
 * Change it so solve maze resets animation (same as new maze). DONE
 * general once over of the controller code. DONE
-* Fix highlight bug with undoing first solution placement DONE - may need to revisit logic as it may be not as clean.
+* Fix highlight bug with undoing first solution placement. DONE

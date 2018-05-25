@@ -116,7 +116,7 @@ public class Controller implements Initializable {
             Pair<List<Point>, List<Point>> result = mSolutionService.getValue();
 
             mPathsTaken = result.getKey();
-            mSolutionStartIndex = mPathsTaken.size();  // Leaving the solution to start at + 1 for compensating in check
+            mSolutionStartIndex = mPathsTaken.size() - 1;
             mPathsTaken.addAll(result.getValue());
             resetAnimation();
 
@@ -220,7 +220,7 @@ public class Controller implements Initializable {
             int nextIndex = mPathsListIterator.nextIndex();
             Point next = mPathsListIterator.next();
 
-            if (nextIndex >= mSolutionStartIndex) {
+            if (nextIndex > mSolutionStartIndex) {
                 mMazeImageBuilder.highlightSolutionPoint(next.x, next.y);
             } else { // If the iterator is not past the point where solution starts, highlight as normal
                 mMazeImageBuilder.highlightNormalPoint(next.x, next.y);
@@ -243,7 +243,7 @@ public class Controller implements Initializable {
             int prevIndex = mPathsListIterator.previousIndex();
             Point prev = mPathsListIterator.previous();
 
-            if (prevIndex >= mSolutionStartIndex) {
+            if (prevIndex > mSolutionStartIndex) {
                 mMazeImageBuilder.unhighlightSolutionPoint(prev.x, prev.y);
             } else {
                 mMazeImageBuilder.unhighlightNormalPoint(prev.x, prev.y);
