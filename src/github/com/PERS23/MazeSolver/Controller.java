@@ -8,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -16,13 +18,15 @@ import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
-import java.awt.Point;
+import java.awt.*;
 import java.net.URL;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+
+    private static final int BASE_ANIMATION_SPEED_MS = 50;
 
     private ControllerSettings mSettings;
     // Variables regarding the maze and its generation/solution
@@ -55,6 +59,8 @@ public class Controller implements Initializable {
     @FXML private Button play_pause;
     @FXML private Button step_forward;
     @FXML private HBox speed_controls;
+    @FXML private Slider speed_slider;
+    @FXML private Label current_speed_indicator;
 
     public Controller() {
         mCurrentSolvingStrategy = SolvingPolicy.DFS;
@@ -85,10 +91,25 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        speed_slider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            double scaledDown = ((Double) newValue) / 100;
+            current_speed_indicator.setText(String.format("%.2fx", scaledDown));
+            mSolutionAnimation.setRate(scaledDown);
+        });
+
         gen_choices.getItems().addAll(GenPolicy.values());
         gen_choices.getSelectionModel().selectFirst();
+        gen_choices.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            mCurrentGenStrategy = newValue;
+            mCreationService.setStrategyChoice(mCurrentGenStrategy);
+        });
+
         solve_choices.getItems().addAll(SolvingPolicy.values());
         solve_choices.getSelectionModel().selectFirst();
+        solve_choices.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            mCurrentSolvingStrategy = newValue;
+            mSolutionService.setStrategyChoice(mCurrentSolvingStrategy);
+        });
 
         step_backward.setGraphic(mStepBack);
         step_backward.setBackground(Background.EMPTY);
@@ -132,7 +153,7 @@ public class Controller implements Initializable {
          * forward/back so the animation doesn't perform any otherwise wasted cycles.
          */
         mSolutionAnimation = new Timeline();
-        mSolutionAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(50), action -> {
+        mSolutionAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(BASE_ANIMATION_SPEED_MS), action -> {
             stepForwardBuildProcess();
         }));
         mSolutionAnimation.setOnFinished(e -> {
@@ -156,12 +177,6 @@ public class Controller implements Initializable {
         }
         for (Node child : speed_controls.getChildren()) {
             child.setDisable(true);
-        }
-    }
-
-    private void setAnimationRate(double animationRate) {
-        if (animationRate > 0 && animationRate < 10) {           // Because of one key frame use -ve playback won't work
-            mSolutionAnimation.setRate(animationRate);
         }
     }
 
@@ -212,21 +227,20 @@ public class Controller implements Initializable {
         mSolutionAnimation.stop();                                                                     // Stop animation
         resetToPlayIcon();
         stepForwardBuildProcess();
-        mSolutionAnimation.setCycleCount(mPathsTaken.size() - mPathsListIterator.nextIndex()); // Recalculate the cycles left
+                                                                                          // Recalculate the cycles left
+        mSolutionAnimation.setCycleCount(mPathsTaken.size() - mPathsListIterator.nextIndex());
     }
 
     private void stepForwardBuildProcess() {
         if (mPathsListIterator != null && mPathsListIterator.hasNext()) {
             int nextIndex = mPathsListIterator.nextIndex();
             Point next = mPathsListIterator.next();
-
+                                  // If the next one you're going to is beyond the solution start, highlight as solution
             if (nextIndex > mSolutionStartIndex) {
                 mMazeImageBuilder.highlightSolutionPoint(next.x, next.y);
-            } else { // If the iterator is not past the point where solution starts, highlight as normal
+            } else {                 // If the iterator is not past the point where solution starts, highlight as normal
                 mMazeImageBuilder.highlightNormalPoint(next.x, next.y);
             }
-        } else {
-            System.out.println("WASTED ANIMATION CYCLE");
         }
     }
 
@@ -243,10 +257,10 @@ public class Controller implements Initializable {
             int prevIndex = mPathsListIterator.previousIndex();
             Point prev = mPathsListIterator.previous();
 
-            if (prevIndex > mSolutionStartIndex) {
-                mMazeImageBuilder.unhighlightSolutionPoint(prev.x, prev.y);
-            } else {
+            if (prevIndex <= mSolutionStartIndex) {
                 mMazeImageBuilder.unhighlightNormalPoint(prev.x, prev.y);
+            } else {
+                mMazeImageBuilder.unhighlightSolutionPoint(prev.x, prev.y);
             }
 
             if (mIsAnimationOver) { // Reset this so hitting play if stepped back from end doesn't restart
@@ -260,7 +274,6 @@ public class Controller implements Initializable {
         mSolutionAnimation.stop();
         resetToPlayIcon();
         disablePlaybackControls();
-
         clearSolutionPathLists();
         createNewMaze(mSettings.getMazeWidth(),mSettings.getMazeHeight());
     }
