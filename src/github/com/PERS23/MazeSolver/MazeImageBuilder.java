@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-public class AnimationBuilder {
+public class MazeImageBuilder {
 
     private final Paint mSolveColor = Paint.valueOf("#0000FF");
     private final Paint mHighlightColor = Paint.valueOf("#FF0000");
@@ -17,13 +17,15 @@ public class AnimationBuilder {
     private final int mCorridorSize;
 
     private Maze mSource;
-    private boolean mHighlighted[][];
+    private boolean mNormalHighlights[][];
+    private boolean mSolutionHighlights[][];
     private Canvas mCanvas;
     private GraphicsContext mGraphicsContext;
 
-    public AnimationBuilder(Maze source, int wallSize, int corridorSize) {
+    public MazeImageBuilder(Maze source, int wallSize, int corridorSize) {
         mSource = source;
-        mHighlighted = new boolean[source.getHeight()][source.getWidth()];
+        mNormalHighlights = new boolean[source.getHeight()][source.getWidth()];
+        mSolutionHighlights = new boolean[source.getHeight()][source.getWidth()];
 
         mWallSize = wallSize;
         mCorridorSize = corridorSize;
@@ -38,26 +40,32 @@ public class AnimationBuilder {
         mGraphicsContext.fillRect(0, 0, width, height);
         for (int y = 0; y < source.getHeight(); y++) {
             for (int x = 0; x < source.getWidth(); x++) {
-                unhighlight(x, y);
+                unhighlightNormalPoint(x, y);
             }
         }
     }
 
-    public void highlight(int x, int y) {
-        if (mHighlighted[y][x] == true) {
-            fillCell(x, y, mSolveColor);
-        } else {
-            mHighlighted[y][x] = true;
-            fillCell(x, y, mHighlightColor);
-        }
+    public void highlightNormalPoint(int x, int y) {
+        mNormalHighlights[y][x] = true;
+        fillCell(x, y, mHighlightColor, mNormalHighlights);
     }
 
-    public void unhighlight(int x, int y) {
-        mHighlighted[y][x] = false;
-        fillCell(x, y, mCorridorColor);
+    public void unhighlightNormalPoint(int x, int y) {
+        mNormalHighlights[y][x] = false;
+        fillCell(x, y, mCorridorColor, mNormalHighlights);
     }
 
-    private void fillCell(int x, int y, Paint color) {
+    public void highlightSolutionPoint(int x, int y) {
+        mSolutionHighlights[y][x] = true;
+        fillCell(x, y, mSolveColor, mSolutionHighlights);
+    }
+
+    public void unhighlightSolutionPoint(int x, int y) {
+        mSolutionHighlights[y][x] = false;
+        fillCell(x, y, mHighlightColor, mNormalHighlights);
+    }
+
+    private void fillCell(int x, int y, Paint color, final boolean[][] highlights) {
                                                              // Grab the upper left hand corner of the cell in the image
         int imageX = mWallSize + x * (mCorridorSize + mWallSize);
         int imageY = mWallSize + y * (mCorridorSize + mWallSize);
@@ -67,25 +75,25 @@ public class AnimationBuilder {
         mGraphicsContext.fillRect(imageX, imageY, mCorridorSize, mCorridorSize);
 
         if (!mSource.isWall(x, y, Direction.NORTH) &&        // Only if the neighbour is the same highlight value as you
-            mHighlighted[y][x] == mHighlighted[y + Direction.NORTH.getDY()][x + Direction.NORTH.getDX()]) {
+            highlights[y][x] == highlights[y + Direction.NORTH.getDY()][x + Direction.NORTH.getDX()]) {
                                                                                              // Up by the wall thickness
             mGraphicsContext.fillRect(imageX, imageY - mWallSize, mCorridorSize, mWallSize);
         }
 
-        if (!mSource.isWall(x, y, Direction.EAST) && // Always a wall at the bound, so the 2nd check won't run with err
-            mHighlighted[y][x] == mHighlighted[y + Direction.EAST.getDY()][x + Direction.EAST.getDX()]) {
+        if (!mSource.isWall(x, y, Direction.EAST) &&  // Always a wall at the bound, so the 2nd check won't run with err
+            highlights[y][x] == highlights[y + Direction.EAST.getDY()][x + Direction.EAST.getDX()]) {
                                                                                       // Right by the corridor thickness
             mGraphicsContext.fillRect(imageX + mCorridorSize, imageY, mWallSize, mCorridorSize);
         }
 
         if (!mSource.isWall(x, y, Direction.SOUTH) &&
-            mHighlighted[y][x] == mHighlighted[y + Direction.SOUTH.getDY()][x + Direction.SOUTH.getDX()]) {
+            highlights[y][x] == highlights[y + Direction.SOUTH.getDY()][x + Direction.SOUTH.getDX()]) {
                                                                                        // Down by the corridor thickness
             mGraphicsContext.fillRect(imageX, imageY + mCorridorSize, mCorridorSize, mWallSize);
         }
 
         if (!mSource.isWall(x, y, Direction.WEST) &&
-            mHighlighted[y][x] == mHighlighted[y + Direction.WEST.getDY()][x + Direction.WEST.getDX()]) {
+            highlights[y][x] == highlights[y + Direction.WEST.getDY()][x + Direction.WEST.getDX()]) {
                                                                                            // Left by the wall thickness
             mGraphicsContext.fillRect(imageX - mWallSize, imageY, mWallSize, mCorridorSize);
         }
@@ -97,5 +105,15 @@ public class AnimationBuilder {
 
     public Image getImage() {
         return mCanvas.snapshot(null, null);
+    }
+
+    public void reset() {
+        for (int y = 0; y < mSource.getHeight(); y++) {
+            for (int x = 0; x < mSource.getWidth(); x++) {
+                mNormalHighlights[y][x] = false;
+                mSolutionHighlights[y][x] = false;
+                unhighlightNormalPoint(x, y);
+            }
+        }
     }
 }

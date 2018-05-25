@@ -25,15 +25,15 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     private ControllerSettings mSettings;
-
-    private GenStrategyPolicy mCurrentGenStrategy;
+    // Variables regarding the maze and its generation/solution
+    private GenPolicy mCurrentGenStrategy;
     private MazeCreationService mCreationService;
     private Maze mCurrentMaze;
-    private SolvingStrategyPolicy mCurrentSolvingStrategy;
+    private SolvingPolicy mCurrentSolvingStrategy;
     private MazeSolvingService mSolutionService;
 
-    private ListIterator<Point> mPathPosition;
-    private List<Point> mPathsTaken;                                                             // Solution comes after
+    private ListIterator<Point> mPathsListIterator;      // Iterator that represents what point we've placed in the list
+    private List<Point> mPathsTaken;  // Solution comes after all paths taken, done so don't have to mess around with switching iterators half way through
 
     private final ImageView mStepBack;
     private final ImageView mStop;
@@ -41,12 +41,14 @@ public class Controller implements Initializable {
     private final ImageView mPause;
     private final ImageView mStepForward;
 
-    private AnimationBuilder mCurrentAnimator;
+    private int mSolutionStartIndex;     // Pivot point as to where the animation should start highlighting the solution
+    private MazeImageBuilder mMazeImageBuilder;
     private Timeline mSolutionAnimation;
+    private boolean mIsAnimationOver;
 
     @FXML private BorderPane root;
-    @FXML private ComboBox<GenStrategyPolicy> gen_choices;
-    @FXML private ComboBox<SolvingStrategyPolicy> solve_choices;
+    @FXML private ComboBox<GenPolicy> gen_choices;
+    @FXML private ComboBox<SolvingPolicy> solve_choices;
     @FXML private HBox playback_controls;
     @FXML private Button step_backward;
     @FXML private Button stop;
@@ -55,8 +57,8 @@ public class Controller implements Initializable {
     @FXML private HBox speed_controls;
 
     public Controller() {
-        mCurrentSolvingStrategy = SolvingStrategyPolicy.DFS;
-        mCurrentGenStrategy = GenStrategyPolicy.RECURSIVE_BACKTRACK;
+        mCurrentSolvingStrategy = SolvingPolicy.DFS;
+        mCurrentGenStrategy = GenPolicy.RECURSIVE_BACKTRACK;
 
         mSettings = new ControllerSettings();
 
@@ -83,9 +85,9 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        gen_choices.getItems().addAll(GenStrategyPolicy.values());
+        gen_choices.getItems().addAll(GenPolicy.values());
         gen_choices.getSelectionModel().selectFirst();
-        solve_choices.getItems().addAll(SolvingStrategyPolicy.values());
+        solve_choices.getItems().addAll(SolvingPolicy.values());
         solve_choices.getSelectionModel().selectFirst();
 
         step_backward.setGraphic(mStepBack);
@@ -105,8 +107,8 @@ public class Controller implements Initializable {
         mCreationService = new MazeCreationService();
         mCreationService.setOnSucceeded(event -> {
             mCurrentMaze = mCreationService.getValue();
-            mCurrentAnimator = new AnimationBuilder(mCurrentMaze, mSettings.getWallSize(), mSettings.getCorridorSize());
-            root.setCenter(mCurrentAnimator.getCanvas());
+            mMazeImageBuilder = new MazeImageBuilder(mCurrentMaze, mSettings.getWallSize(), mSettings.getCorridorSize());
+            root.setCenter(mMazeImageBuilder.getCanvas());
         });
 
         mSolutionService = new MazeSolvingService();
@@ -114,28 +116,29 @@ public class Controller implements Initializable {
             Pair<List<Point>, List<Point>> result = mSolutionService.getValue();
 
             mPathsTaken = result.getKey();
+            mSolutionStartIndex = mPathsTaken.size();  // Leaving the solution to start at + 1 for compensating in check
             mPathsTaken.addAll(result.getValue());
-            putAnimationPositionToStart();
+            resetAnimation();
 
             mSolutionAnimation.setCycleCount(mPathsTaken.size());
 
-            enablePlaybackControls();
+            enablePlaybackControls();                      // Only enable playback once the solution thread has finished
         });
 
+        /* Animation is done with 1 keyframe that repeats over and over, this key frame has a command class attached
+         * which has its handle method called after the frame is over. This handle method moves the iterator forward
+         * and calls the highlight method on the maze image builder with the x/y point returned by the iterators next().
+         * Animations cycle count is set to the length of the returned list, and is recalculated if the user steps
+         * forward/back so the animation doesn't perform any otherwise wasted cycles.
+         */
         mSolutionAnimation = new Timeline();
         mSolutionAnimation.getKeyFrames().add(new KeyFrame(Duration.millis(50), action -> {
-            if (mPathPosition != null && mPathPosition.hasNext()) {
-                Point currentPoint = mPathPosition.next();
-                mCurrentAnimator.highlight(currentPoint.x, currentPoint.y);
-            }
+            stepForwardBuildProcess();
         }));
         mSolutionAnimation.setOnFinished(e -> {
-            play_pause.setGraphic(mPlay);
+            resetToPlayIcon();
+            mIsAnimationOver = true;                // Explicitly mark as ended so as to support replay function correctly
         });
-    }
-
-    private void putAnimationPositionToStart() {
-        mPathPosition = mPathsTaken.listIterator();
     }
 
     private void enablePlaybackControls() {
@@ -156,8 +159,10 @@ public class Controller implements Initializable {
         }
     }
 
-    private void setAnimationRate(double animationRate)  {
-        mSolutionAnimation.setRate(animationRate);
+    private void setAnimationRate(double animationRate) {
+        if (animationRate > 0 && animationRate < 10) {           // Because of one key frame use -ve playback won't work
+            mSolutionAnimation.setRate(animationRate);
+        }
     }
 
     @FXML
@@ -170,12 +175,19 @@ public class Controller implements Initializable {
     }
 
     private void playAnimation() {
-        if (mSolutionAnimation.getStatus() == Animation.Status.STOPPED) {
-            clearAllAnimationHighlights();
-            putAnimationPositionToStart();
+        if (mIsAnimationOver) {                               // If animation has ended, and user clicks play restart it
+            mMazeImageBuilder.reset();
+            resetAnimation();
+            mIsAnimationOver = false;
         }
         mSolutionAnimation.play();
         play_pause.setGraphic(mPause);
+    }
+
+    // Resets the cycle count back to the length, and puts the iterator back to the start of the list
+    private void resetAnimation() {
+        mSolutionAnimation.setCycleCount(mPathsTaken.size());
+        mPathsListIterator = mPathsTaken.listIterator();            // Iterator starts off at -1 with next pointing to 0
     }
 
     private void pauseAnimation() {
@@ -190,22 +202,57 @@ public class Controller implements Initializable {
     @FXML
     public void stopAnimation() {
         mSolutionAnimation.stop();
+        resetAnimation();
         resetToPlayIcon();
-        clearAllAnimationHighlights();
+        mMazeImageBuilder.reset();
     }
 
-    private void clearAllAnimationHighlights() {
-        for (Point p : mPathsTaken) {
-            mCurrentAnimator.unhighlight(p.x, p.y);
+    @FXML
+    public void stepForwardAnimation() {
+        mSolutionAnimation.stop();                                                                     // Stop animation
+        resetToPlayIcon();
+        stepForwardBuildProcess();
+        mSolutionAnimation.setCycleCount(mPathsTaken.size() - mPathsListIterator.nextIndex()); // Recalculate the cycles left
+    }
+
+    private void stepForwardBuildProcess() {
+        if (mPathsListIterator != null && mPathsListIterator.hasNext()) {
+            int nextIndex = mPathsListIterator.nextIndex();
+            Point next = mPathsListIterator.next();
+
+            if (nextIndex >= mSolutionStartIndex) {
+                mMazeImageBuilder.highlightSolutionPoint(next.x, next.y);
+            } else { // If the iterator is not past the point where solution starts, highlight as normal
+                mMazeImageBuilder.highlightNormalPoint(next.x, next.y);
+            }
+        } else {
+            System.out.println("WASTED ANIMATION CYCLE");
         }
     }
 
-    private void stepBackAnimation() {
-
+    @FXML
+    public void stepBackAnimation() {
+        mSolutionAnimation.stop();
+        resetToPlayIcon();
+        stepBackBuildProcess();
+        mSolutionAnimation.setCycleCount(mPathsTaken.size() - mPathsListIterator.nextIndex());
     }
 
-    private void stepForwardAnimation() {
+    private void stepBackBuildProcess() {
+        if (mPathsListIterator != null && mPathsListIterator.hasPrevious()) {
+            int prevIndex = mPathsListIterator.previousIndex();
+            Point prev = mPathsListIterator.previous();
 
+            if (prevIndex >= mSolutionStartIndex) {
+                mMazeImageBuilder.unhighlightSolutionPoint(prev.x, prev.y);
+            } else {
+                mMazeImageBuilder.unhighlightNormalPoint(prev.x, prev.y);
+            }
+
+            if (mIsAnimationOver) { // Reset this so hitting play if stepped back from end doesn't restart
+                mIsAnimationOver = false;
+            }
+        }
     }
 
     @FXML
@@ -229,7 +276,7 @@ public class Controller implements Initializable {
 
     private void clearSolutionPathLists() {
         mPathsTaken = null;
-        mPathPosition = null;
+        mPathsListIterator = null;
     }
 
     @FXML
@@ -246,7 +293,6 @@ public class Controller implements Initializable {
         if (mCurrentSolvingStrategy != mSolutionService.getStrategyChoice()) {
             mSolutionService.setStrategyChoice(mCurrentSolvingStrategy);
         }
-
         mSolutionService.setPoints(start, end);                                              // Update the target points
         mSolutionService.restart();
     }

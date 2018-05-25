@@ -1,12 +1,12 @@
 package github.com.PERS23.MazeSolver;
 
-public enum GenStrategyPolicy {
+public enum GenPolicy {
     RECURSIVE_BACKTRACK(new RecursiveBacktrack(), "Recursive Backtracker");
 
     private String mName;
     private GenStrategy mGenerator;
 
-    private GenStrategyPolicy(GenStrategy generator, String name) {
+    private GenPolicy(GenStrategy generator, String name) {
         mGenerator = generator;
         mName = name;
     }

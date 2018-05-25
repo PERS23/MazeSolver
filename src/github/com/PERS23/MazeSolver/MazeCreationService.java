@@ -5,15 +5,15 @@ import javafx.concurrent.Task;
 
 public class MazeCreationService extends Service<Maze> {
 
-    private GenStrategyPolicy mStrategyChoice;
+    private GenPolicy mStrategyChoice;
     private int mWidth;
     private int mHeight;
 
-    public GenStrategyPolicy getStrategyChoice() {
+    public GenPolicy getStrategyChoice() {
         return mStrategyChoice;
     }
 
-    public void setStrategyChoice(GenStrategyPolicy strategyChoice) {
+    public void setStrategyChoice(GenPolicy strategyChoice) {
         mStrategyChoice = strategyChoice;
     }
 
@@ -35,7 +35,7 @@ public class MazeCreationService extends Service<Maze> {
 
     @Override
     protected Task<Maze> createTask() {
-        final GenStrategyPolicy strategyChoice = mStrategyChoice;
+        final GenPolicy strategyChoice = mStrategyChoice;
         final int width = getWidth(), height = getHeight();
 
         return new Task<Maze>() {

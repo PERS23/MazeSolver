@@ -33,10 +33,10 @@
          <children>
             <HBox fx:id="playback_controls" alignment="CENTER" spacing="8.0">
                <children>
-                  <Button fx:id="step_backward" mnemonicParsing="false" />
+                  <Button fx:id="step_backward" mnemonicParsing="false" onAction="#stepBackAnimation"/>
                   <Button fx:id="stop" mnemonicParsing="false" onAction="#stopAnimation"/>
                   <Button fx:id="play_pause" mnemonicParsing="false" onAction="#togglePlayPause"/>
-                  <Button fx:id="step_forward" mnemonicParsing="false" />
+                  <Button fx:id="step_forward" mnemonicParsing="false" onAction="#stepForwardAnimation" />
                </children>
             </HBox>
             <HBox fx:id="speed_controls" alignment="CENTER" spacing="16.0">

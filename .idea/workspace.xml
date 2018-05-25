@@ -5,30 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/res/img/ic_pause.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/img/ic_play.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/img/ic_step_back.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/img/ic_step_forward.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/img/ic_stop.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/res/values/strings_en.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/ControllerSettings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/GenStrategyPolicy.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingStrategyPolicy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/go_over.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JavaFxApplication/github/com/PERS23/MazeSolver/MainUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaFxApplication/github/com/PERS23/MazeSolver/MainUI.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/plan.txt" beforeDir="false" afterPath="$PROJECT_DIR$/plan.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/AnimationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/AnimationBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/AnimationBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeImageBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Controller.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/DepthFirstSolve.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/DepthFirstSolve.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/GenerationStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/GenStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/GenStrategyPolicy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/GenPolicy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MainUI.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MainUI.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Maze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Maze.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeCreationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeCreationService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeSolvingService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeSolvingService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/RecursiveBacktrack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/RecursiveBacktrack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingStrategy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/github/com/PERS23/MazeSolver/MazeTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/test/github/com/PERS23/MazeSolver/MazeTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingStrategyPolicy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingPolicy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/todo.txt" beforeDir="false" afterPath="$PROJECT_DIR$/todo.txt" afterDir="false" />
     </list>
     <ignored path="JavaFxApplication.iws" />
@@ -87,14 +75,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Controller.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1547">
-              <caret line="111" column="52" selection-start-line="111" selection-start-column="52" selection-end-line="111" selection-end-column="52" />
+            <state relative-caret-position="322">
+              <caret line="222" column="27" lean-forward="true" selection-start-line="222" selection-start-column="27" selection-end-line="222" selection-end-column="27" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#7707#7708#0" expanded="true" />
+                <element signature="e#7751#7752#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="todo.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/todo.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MazeImageBuilder.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeImageBuilder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-545">
+              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -102,53 +110,17 @@
       <file leaf-file-name="ControllerSettings.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/ControllerSettings.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="153">
+            <state relative-caret-position="-102">
               <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AnimationBuilder.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/AnimationBuilder.java">
+      <file leaf-file-name="DepthFirstSolve.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/DepthFirstSolve.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1003">
-              <caret line="76" column="81" selection-start-line="76" selection-start-column="81" selection-end-line="76" selection-end-column="81" />
-              <folding>
-                <element signature="e#4404#4405#0" expanded="true" />
-                <element signature="e#4434#4435#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Maze.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Maze.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="13" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="SolvingStrategyPolicy.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingStrategyPolicy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
-              <folding>
-                <element signature="e#414#415#0" expanded="true" />
-                <element signature="e#442#443#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MainUI.fxml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MainUI.fxml">
-          <provider editor-type-id="JavaFX-Scene-Builder" />
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="663">
-              <caret line="39" column="26" selection-start-line="39" selection-start-column="26" selection-end-line="39" selection-end-column="26" />
+            <state relative-caret-position="1054">
+              <caret line="67" column="5" lean-forward="true" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -218,16 +190,16 @@
         <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeSolvingService.java" />
         <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/GenStrategyPolicy.java" />
         <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingStrategy.java" />
-        <option value="$PROJECT_DIR$/todo.txt" />
         <option value="$PROJECT_DIR$/res/values/string.fxml" />
         <option value="$PROJECT_DIR$/res/values/strings_en.properties" />
         <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Main.java" />
         <option value="$PROJECT_DIR$/go_over.txt" />
         <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/ControllerSettings.java" />
+        <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/AnimationBuilder.java" />
         <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MainUI.fxml" />
         <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/DepthFirstSolve.java" />
+        <option value="$PROJECT_DIR$/todo.txt" />
         <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Controller.java" />
-        <option value="$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/AnimationBuilder.java" />
       </list>
     </option>
   </component>
@@ -247,7 +219,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -275,8 +248,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="AndroidView" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -567,6 +539,7 @@
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49944875" weight="0.32925585" />
       <window_info anchor="right" id="Palette&#9;" order="9" />
       <window_info id="Image Layers" order="6" />
       <window_info anchor="right" id="Capture Analysis" order="7" />
@@ -585,7 +558,6 @@
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39979124" />
       <window_info id="Favorites" order="4" side_tool="true" />
       <window_info anchor="right" id="JetGradle" order="4" />
-      <window_info anchor="bottom" id="Messages" order="7" sideWeight="0.49944875" weight="0.32925585" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32925585" />
@@ -616,7 +588,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/Graph/Edge.java" />
     <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/Graph/GraphADT.java" />
     <entry file="jar://$MAVEN_REPOSITORY$/org/jgrapht/jgrapht-core/1.2.0/jgrapht-core-1.2.0.jar!/org/jgrapht/Graph.class">
       <provider selected="true" editor-type-id="text-editor">
@@ -750,7 +721,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/GenStrategyPolicy.java">
+    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/GenPolicy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
           <caret line="1" selection-start-line="1" selection-end-line="1" />
@@ -810,13 +781,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/todo.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeSolvingService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -852,7 +816,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingStrategyPolicy.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_161/src.zip!/java/util/ListIterator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="119" column="8" selection-start-line="119" selection-start-column="8" selection-end-line="119" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MainUI.fxml">
+      <provider editor-type-id="JavaFX-Scene-Builder" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="463">
+          <caret line="40" column="19" lean-forward="true" selection-start-line="40" selection-start-column="19" selection-end-line="40" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/SolvingPolicy.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
@@ -863,59 +842,56 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MainUI.fxml">
-      <provider editor-type-id="JavaFX-Scene-Builder" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="663">
-          <caret line="39" column="26" selection-start-line="39" selection-start-column="26" selection-end-line="39" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Maze.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="8" selection-start-line="12" selection-start-column="8" selection-end-line="13" selection-end-column="45" />
+        <state relative-caret-position="85">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/DepthFirstSolve.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_161/javafx-src.zip!/javafx/animation/Animation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-238">
-          <caret line="18" column="40" lean-forward="true" selection-start-line="18" selection-start-column="40" selection-end-line="18" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_161/src.zip!/java/util/ListIterator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="211">
-          <caret line="119" column="8" selection-start-line="119" selection-start-column="8" selection-end-line="119" selection-end-column="8" />
+        <state relative-caret-position="522">
+          <caret line="284" column="22" selection-start-line="284" selection-start-column="22" selection-end-line="284" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/ControllerSettings.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="153">
+        <state relative-caret-position="-102">
           <caret line="9" column="26" selection-start-line="9" selection-start-column="26" selection-end-line="9" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/MazeImageBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-545">
+          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/DepthFirstSolve.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="67" column="5" lean-forward="true" selection-start-line="67" selection-start-column="5" selection-end-line="67" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/todo.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="28" lean-forward="true" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/Controller.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1547">
-          <caret line="111" column="52" selection-start-line="111" selection-start-column="52" selection-end-line="111" selection-end-column="52" />
+        <state relative-caret-position="322">
+          <caret line="222" column="27" lean-forward="true" selection-start-line="222" selection-start-column="27" selection-end-line="222" selection-end-column="27" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/github/com/PERS23/MazeSolver/AnimationBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1003">
-          <caret line="76" column="81" selection-start-line="76" selection-start-column="81" selection-end-line="76" selection-end-column="81" />
-          <folding>
-            <element signature="e#4404#4405#0" expanded="true" />
-            <element signature="e#4434#4435#0" expanded="true" />
+            <element signature="e#7707#7708#0" expanded="true" />
+            <element signature="e#7751#7752#0" expanded="true" />
           </folding>
         </state>
       </provider>

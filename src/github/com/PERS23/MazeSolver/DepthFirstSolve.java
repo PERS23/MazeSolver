@@ -60,6 +60,10 @@ public class DepthFirstSolve implements SolvingStrategy {
             prev = backtrack.get(prev);
         }
 
+        if (!solutionPath.isEmpty()) {
+            solutionPath.add(0, start);
+        }
+
         return solutionPath;
     }
 }

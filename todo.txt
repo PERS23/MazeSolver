@@ -1,1 +1,15 @@
 todo:
+
+* Fix bug where going back at the end and hitting play resets the animation
+* Implement settings
+* Comment animation code
+* Add BFS and Dijkstra
+* Look into other generation algorithms
+* Add functionality for drop downs
+* Implement resizing code
+* Implement animation speed.
+* Implement base speed change in settings
+
+* Change it so solve maze resets animation (same as new maze). DONE
+* general once over of the controller code. DONE
+* Fix highlight bug with undoing first solution placement DONE - may need to revisit logic as it may be not as clean.

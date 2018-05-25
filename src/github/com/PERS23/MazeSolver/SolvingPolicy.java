@@ -1,12 +1,12 @@
 package github.com.PERS23.MazeSolver;
 
-public enum SolvingStrategyPolicy {
+public enum SolvingPolicy {
     DFS(new DepthFirstSolve(), "Depth First Search");
 
     private String mName;
     private SolvingStrategy mSolver;
 
-    SolvingStrategyPolicy(SolvingStrategy solver, String name) {
+    SolvingPolicy(SolvingStrategy solver, String name) {
         mName = name;
         mSolver = solver;
     }
