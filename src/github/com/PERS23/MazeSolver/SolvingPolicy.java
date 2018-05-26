@@ -2,7 +2,8 @@ package github.com.PERS23.MazeSolver;
 
 public enum SolvingPolicy {
     DFS(new DepthFirstSolve(), "Depth First Search"),
-    BFS(new BreadthFirstSolve(), "Breadth First Search");
+    BFS(new BreadthFirstSolve(), "Breadth First Search"),
+    DIJKSTRA(new DijkstraSolve(), "Djikstra");
 
     private String mName;
     private SolvingStrategy mSolver;

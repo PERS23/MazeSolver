@@ -6,6 +6,8 @@ todo:
 * Implement resizing code
 * Implement base speed change in settings
 * Fix logic in cycle count calculation with (only) step back animation function. 1 extra frame being played
+* Add back in the graph data set/get methods.
+* Debug Dijkstra
 
 Done:
 

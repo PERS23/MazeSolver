@@ -39,4 +39,8 @@ public class Maze {
     public boolean isWall(int x, int y, Direction choice) {
         return mLabyrinth[y][x].isWall(choice);
     }
+
+    public int getNumOfAdjWalls(int x, int y) {
+        return mLabyrinth[y][x].numOfAdjWalls();
+    }
 }

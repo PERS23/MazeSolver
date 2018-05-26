@@ -15,4 +15,12 @@ public class MazeCell {
     public void carve(Direction choice) {
         mWalls[choice.getWallIndex()] = false;
     }
+
+    public int numOfAdjWalls() {
+        int count = 0;
+        for (int i = 0; i < 4; i++) {
+            if (mWalls[i]) count++;
+        }
+        return count;
+    }
 }

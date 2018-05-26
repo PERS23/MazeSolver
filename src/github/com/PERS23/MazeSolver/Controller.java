@@ -53,6 +53,7 @@ public class Controller implements Initializable {
     @FXML private BorderPane root;
     @FXML private ComboBox<GenPolicy> gen_choices;
     @FXML private ComboBox<SolvingPolicy> solve_choices;
+    @FXML private Button solve_maze_button;
     @FXML private HBox playback_controls;
     @FXML private Button step_backward;
     @FXML private Button stop;
@@ -130,6 +131,7 @@ public class Controller implements Initializable {
             mCurrentMaze = mCreationService.getValue();
             mMazeImageBuilder = new MazeImageBuilder(mCurrentMaze, mSettings.getWallSize(), mSettings.getCorridorSize());
             root.setCenter(mMazeImageBuilder.getCanvas());
+            solve_maze_button.setDisable(false);
         });
 
         mSolutionService = new MazeSolvingService();
@@ -271,7 +273,8 @@ public class Controller implements Initializable {
 
     @FXML
     public void handleNewMazeButton() {
-        mSolutionAnimation.stop();
+        mSolutionAnimation.stop();                                                         // Immediately stop animation
+        solve_maze_button.setDisable(true);
         resetToPlayIcon();
         disablePlaybackControls();
         clearSolutionPathLists();
