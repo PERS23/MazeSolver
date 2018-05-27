@@ -203,8 +203,10 @@ public class Controller implements Initializable {
 
     // Resets the cycle count back to the length, and puts the iterator back to the start of the list
     private void resetAnimation() {
-        mSolutionAnimation.setCycleCount(mPathsTaken.size());
-        mPathsListIterator = mPathsTaken.listIterator();            // Iterator starts off at -1 with next pointing to 0
+        if (mPathsTaken != null) {
+            mSolutionAnimation.setCycleCount(mPathsTaken.size());
+            mPathsListIterator = mPathsTaken.listIterator();
+        }
     }
 
     private void pauseAnimation() {
@@ -297,6 +299,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void handleSolveMazeButton() {
+        stopAnimation();
         disablePlaybackControls();
         solveCurrentMaze(mSettings.getStartPoint(), mSettings.getEndPoint());
     }

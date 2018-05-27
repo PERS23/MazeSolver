@@ -21,7 +21,7 @@ public class DijkstraSolve implements SolvingStrategy {
     }
 
     private Graph<Point, DefaultWeightedEdge> placeVertices(Maze target, Point start, Point end) {
-        Graph<Point, DefaultWeightedEdge> mazeGraph = new DefaultUndirectedWeightedGraph<Point, DefaultWeightedEdge>(
+        Graph<Point, DefaultWeightedEdge> mazeGraph = new DefaultUndirectedWeightedGraph<>(
         null, () -> new DefaultWeightedEdge());
 
         mazeGraph.addVertex(start);
@@ -29,7 +29,7 @@ public class DijkstraSolve implements SolvingStrategy {
 
         for (int y = 0; y < target.getHeight(); y++) {
             for (int x = 0; x < target.getWidth(); x++) {
-                if (target.getNumOfAdjWalls(x, y) == 3){
+                if (target.getNumOfWalls(x, y) == 3){
                     mazeGraph.addVertex(new Point(x, y));
                 } else if (!target.isWall(x, y, Direction.NORTH) || !target.isWall(x, y, Direction.SOUTH)) {
                     if (!target.isWall(x, y, Direction.EAST) || !target.isWall(x, y, Direction.WEST)) {
@@ -82,27 +82,36 @@ public class DijkstraSolve implements SolvingStrategy {
 
     private Pair<List<Point>, List<Point>> Dijkstra(Graph<Point, DefaultWeightedEdge> mazeGraph, Point start, Point end) {
         Map<Point, Double> cloud = new HashMap<>();
+        Map<Point, Point> prev = new HashMap<>();
         PriorityQueue<PQPointAdapter> pQueue = new PriorityQueue<>();
+        List<Pair<Point, Point>> edgesTaken = new LinkedList<>();
 
         initDijkstra(mazeGraph, cloud, pQueue, start);
 
         while (!pQueue.isEmpty()) {
-            PQPointAdapter queueElement = pQueue.poll();
-            Point current = queueElement.getVertex();
+            PQPointAdapter currentPQElement = pQueue.poll();
+            Point currentVertex = currentPQElement.getVertex();
 
-            for (Point adjacent : Graphs.neighborListOf(mazeGraph, current)) {
-                double relaxWeight = cloud.get(current) + mazeGraph.getEdgeWeight(mazeGraph.getEdge(current, adjacent));
-                if (cloud.get(adjacent) > relaxWeight) {
-                    queueElement.setShortestDist(relaxWeight);
-                    pQueue.offer(queueElement);
-                    cloud.put(adjacent, relaxWeight);
+            for (Point adjacentVertex : Graphs.neighborListOf(mazeGraph, currentVertex)) {
+                edgesTaken.add(new Pair<>(currentVertex, adjacentVertex));
+                PQPointAdapter adjacentPQElement = new PQPointAdapter(adjacentVertex, cloud.get(adjacentVertex));
+
+                double relaxWeight = cloud.get(currentVertex) +
+                                     mazeGraph.getEdgeWeight(mazeGraph.getEdge(currentVertex, adjacentVertex));
+
+                if (adjacentPQElement.getShortestDist() > relaxWeight) {
+                    pQueue.remove(adjacentPQElement);
+                    adjacentPQElement.setShortestDist(relaxWeight);
+                    pQueue.offer(adjacentPQElement);
+
+                    cloud.put(adjacentVertex, relaxWeight);
+                    prev.put(adjacentVertex, currentVertex);
                 }
             }
         }
 
         System.out.println(cloud.get(end));
-
-        return new Pair<>(new ArrayList<>(mazeGraph.vertexSet()), new ArrayList<>());
+        return new Pair<>(getPointsExplored(edgesTaken), getSolutionPoints(prev, start, end));
     }
 
     private void initDijkstra(Graph<Point, DefaultWeightedEdge> mazeGraph, Map<Point, Double> cloud, PriorityQueue<PQPointAdapter> pQueue, Point start) {
@@ -118,9 +127,65 @@ public class DijkstraSolve implements SolvingStrategy {
         }
     }
 
-    private List<Point> getPointsFromEdge(Point v1, Point v2) {
+    private List<Point> getSolutionPoints(Map<Point, Point> backtrack, Point start, Point end) {
+        List<Point> solutionPoints = new LinkedList<>();
+        List<Pair<Point, Point>> solutionEdges = new LinkedList<>();
 
+        Point prev = backtrack.get(end);
+        Point current = end;
 
-        return null;
+        while (backtrack.containsKey(current)) {
+            solutionEdges.add(0, new Pair<>(current, prev));
+
+            current = prev;
+            prev = backtrack.get(prev);
+        }
+
+        for (Pair<Point, Point> edge : solutionEdges) {
+            solutionPoints.addAll(getPointsFromEdge(edge));
+        }
+        solutionPoints.add(end);
+
+        return solutionPoints;
+    }
+
+    private List<Point> getPointsExplored(List<Pair<Point, Point>> edges) {
+        List<Point> points = new LinkedList<>();
+
+        for (Pair<Point, Point> edge : edges) {
+            points.addAll(getPointsFromEdge(edge));
+        }
+
+        return points;
+    }
+
+    // DDA Algorithm: https://www.tutorialspoint.com/computer_graphics/line_generation_algorithm.htm
+    private List<Point> getPointsFromEdge(Pair<Point, Point> edge) {
+        List<Point> inbetweeners = new LinkedList<>();
+        Point source = edge.getKey();
+        Point dest = edge.getValue();
+
+        int dx = dest.x - source.x;
+        int dy = dest.y - source.y;
+        int steps;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            steps = Math.abs(dx);
+        } else {
+            steps = Math.abs(dy);
+        }
+
+        int x = source.x;
+        double xIncrement = dx / (double) steps;
+        int y = source.y;
+        double yIncrement = dy / (double) steps;
+
+        for (int i = 0; i < steps; i++) {
+            x += xIncrement;
+            y += yIncrement;
+            inbetweeners.add(new Point(x, y));
+        }
+
+        return inbetweeners;
     }
 }

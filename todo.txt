@@ -18,3 +18,4 @@ Done:
 * Fix bug where going back at the end and hitting play resets the animation
 * Add functionality for drop downs
 * Implement animation speed.
+* Debug Dijkstra (Was offering current element back into PQ rather than the adjacent)

@@ -16,7 +16,7 @@ public class MazeCell {
         mWalls[choice.getWallIndex()] = false;
     }
 
-    public int numOfAdjWalls() {
+    public int numOfWalls() {
         int count = 0;
         for (int i = 0; i < 4; i++) {
             if (mWalls[i]) count++;

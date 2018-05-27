@@ -40,7 +40,7 @@ public class Maze {
         return mLabyrinth[y][x].isWall(choice);
     }
 
-    public int getNumOfAdjWalls(int x, int y) {
-        return mLabyrinth[y][x].numOfAdjWalls();
+    public int getNumOfWalls(int x, int y) {
+        return mLabyrinth[y][x].numOfWalls();
     }
 }
