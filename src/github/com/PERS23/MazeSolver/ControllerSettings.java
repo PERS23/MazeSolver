@@ -15,8 +15,8 @@ public class ControllerSettings {
     public ControllerSettings() {
         mMazeWidth = 20;
         mMazeHeight = 20;
-        mCorridorSize = 16;
-        mWallSize = 8;
+        mCorridorSize = 24;
+        mWallSize = 12;
         mStartPoint = new Point(0, 0);
         mEndPoint = new Point(19, 19);
     }
