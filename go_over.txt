@@ -1,8 +1,0 @@
-go-over:
-
-* Resource bundles and how they work
-* Combo box factory and init
-* Concurrency again
-* Observable in change listener
-* Sliders
-* Generics (QUICKLY) upper bounds and implementing generic interfaces
