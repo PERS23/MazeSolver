@@ -3,6 +3,7 @@ package github.com.PERS23.MazeSolver;
 import java.awt.*;
 import java.util.Objects;
 
+// Wrapper class for vertices, for use in the PQ for Dijkstra.
 public class PQPointAdapter implements Comparable<PQPointAdapter> {
 
     private Point mVertex;

@@ -14,22 +14,23 @@ public class DijkstraSolve implements SolvingStrategy {
 
     @Override
     public Pair<List<Point>, List<Point>> solve(Maze target, Point start, Point end) {
-        Graph<Point, DefaultWeightedEdge> mazeGraph = placeVertices(target, start, end);
-        linkVertices(mazeGraph, target);
+        Graph<Point, DefaultWeightedEdge> mazeGraph = createVertices(target, start, end);
+        createEdges(mazeGraph, target);
         return Dijkstra(mazeGraph, start, end);
 
     }
 
-    private Graph<Point, DefaultWeightedEdge> placeVertices(Maze target, Point start, Point end) {
+    private Graph<Point, DefaultWeightedEdge> createVertices(Maze target, Point start, Point end) {
         Graph<Point, DefaultWeightedEdge> mazeGraph = new DefaultUndirectedWeightedGraph<>(
-        null, () -> new DefaultWeightedEdge());
-
+        null, () -> new DefaultWeightedEdge());          // Need edge supplier otherwise we can't add edges
+                                   // Explicitly add the start and end otherwise they might not get picked up in process
         mazeGraph.addVertex(start);
         mazeGraph.addVertex(end);
-
+                                                                                          // For every point in the maze
         for (int y = 0; y < target.getHeight(); y++) {
             for (int x = 0; x < target.getWidth(); x++) {
-                if (target.getNumOfWalls(x, y) == 3){
+                      // First check if the point is a dead-end, then a junction. If either are true it becomes a vertex
+                if (target.getNumOfWalls(x, y) == 3) {
                     mazeGraph.addVertex(new Point(x, y));
                 } else if (!target.isWall(x, y, Direction.NORTH) || !target.isWall(x, y, Direction.SOUTH)) {
                     if (!target.isWall(x, y, Direction.EAST) || !target.isWall(x, y, Direction.WEST)) {
@@ -39,28 +40,27 @@ public class DijkstraSolve implements SolvingStrategy {
             }
         }
 
-        return mazeGraph;
+        return mazeGraph;                                                           // Edges get assigned in createEdges
     }
 
-    private void linkVertices(Graph<Point, DefaultWeightedEdge> mazeGraph, Maze target) {
+    private void createEdges(Graph<Point, DefaultWeightedEdge> mazeGraph, Maze target) {
         List<Pair<Point, Point>> edgesToAdd = new LinkedList<>();
         List<Double> weights = new LinkedList<>();
-
-        // If the graph is modified while an iteration over the set is in progress, the results of the iteration are undefined.
-        for (Point current : mazeGraph.vertexSet()) {
+                                  // Graph uses fast fail iterators so have to save to be edges out to a list explicitly
+        for (Point vertex : mazeGraph.vertexSet()) {                                    // For every vertex in the graph
+                                                       // Search for another vertex to link it to in all NESW directions
             for (Direction choice : Direction.values()) {
-                Point opposite = searchForLink(mazeGraph, current, target, choice);
+                Point opposite = searchForLink(mazeGraph, vertex, target, choice);
                 if (opposite != null) {
-                    edgesToAdd.add(new Pair<>(current, opposite));
-                    weights.add(current.distance(opposite));
+                    edgesToAdd.add(new Pair<>(vertex, opposite));
+                    weights.add(vertex.distance(opposite));                      // Explicitly saving weight out as well
                 }
             }
         }
-
+                                                                                // Actual edge creation and adding stage
         for (int i = 0; i < edgesToAdd.size(); i++) {
             Point source = edgesToAdd.get(i).getKey();
             Point dest = edgesToAdd.get(i).getValue();
-            // If the underlying graph implementation's Graph.getEdgeSupplier() returns null, then this method cannot create edges and throws an UnsupportedOperationException.
             mazeGraph.addEdge(source, dest);
             mazeGraph.setEdgeWeight(mazeGraph.getEdge(source, dest), weights.get(i));
         }
@@ -69,10 +69,10 @@ public class DijkstraSolve implements SolvingStrategy {
     private Point searchForLink(Graph<Point, DefaultWeightedEdge> mazeGraph, Point vertex, Maze target,
                                 Direction direction) {
         Point current = new Point(vertex.x, vertex.y);
-        // While you're not facing a wall and the one you've got to is a vertex in the graph
+                                                                                       // While you're not facing a wall
         while (!target.isWall(current.x, current.y, direction)) {
             current.translate(direction.getDX(), direction.getDY());
-            if (mazeGraph.containsVertex(current)) {
+            if (mazeGraph.containsVertex(current)) {      // If the one you got to is a vertex, stop as you found a link
                 return current;
             }
         }
@@ -81,45 +81,47 @@ public class DijkstraSolve implements SolvingStrategy {
     }
 
     private Pair<List<Point>, List<Point>> Dijkstra(Graph<Point, DefaultWeightedEdge> mazeGraph, Point start, Point end) {
-        Map<Point, Double> cloud = new HashMap<>();
-        Map<Point, Point> prev = new HashMap<>();
+        Map<Point, Double> cloud = new HashMap<>();                            // Cloud used for Edge Relaxation process
+        Map<Point, Point> prev = new HashMap<>();                                  // Backtrack map for finding solution
         PriorityQueue<PQPointAdapter> pQueue = new PriorityQueue<>();
         List<Pair<Point, Point>> edgesTaken = new LinkedList<>();
 
         initDijkstra(mazeGraph, cloud, pQueue, start);
 
         while (!pQueue.isEmpty()) {
-            PQPointAdapter currentPQElement = pQueue.poll();
-            Point currentVertex = currentPQElement.getVertex();
-
+            PQPointAdapter currentPQElement = pQueue.poll();                        // Get the min element out of the PQ
+            Point currentVertex = currentPQElement.getVertex();     // Get vertex out of element, so can lookup in graph
+                                                                         // For all the neighbours of the current vertex
             for (Point adjacentVertex : Graphs.neighborListOf(mazeGraph, currentVertex)) {
-                edgesTaken.add(new Pair<>(currentVertex, adjacentVertex));
                 PQPointAdapter adjacentPQElement = new PQPointAdapter(adjacentVertex, cloud.get(adjacentVertex));
 
                 double relaxWeight = cloud.get(currentVertex) +
                                      mazeGraph.getEdgeWeight(mazeGraph.getEdge(currentVertex, adjacentVertex));
 
                 if (adjacentPQElement.getShortestDist() > relaxWeight) {
-                    pQueue.remove(adjacentPQElement);
+                    pQueue.remove(adjacentPQElement);                  // Update in PQ requires removal and re-insertion
                     adjacentPQElement.setShortestDist(relaxWeight);
                     pQueue.offer(adjacentPQElement);
-
+                                                                           // Record the route you went down for display
+                    edgesTaken.add(new Pair<>(currentVertex, adjacentVertex));
+                                                       // Update the cloud and backtrack map if you found a shorter path
                     cloud.put(adjacentVertex, relaxWeight);
                     prev.put(adjacentVertex, currentVertex);
                 }
             }
         }
 
-        System.out.println(cloud.get(end));
-        return new Pair<>(getPointsExplored(edgesTaken), getSolutionPoints(prev, start, end));
+        List<Point> allTaken = getPointsExplored(edgesTaken);
+        allTaken.add(0, start);
+        return new Pair<>(allTaken, getSolutionPoints(prev, start, end));
     }
 
     private void initDijkstra(Graph<Point, DefaultWeightedEdge> mazeGraph, Map<Point, Double> cloud, PriorityQueue<PQPointAdapter> pQueue, Point start) {
-        cloud.put(start, 0.0);
+        cloud.put(start, 0.0);                                                  // Put the start as having a weight of 0
         pQueue.offer(new PQPointAdapter(start, 0.0));
-
+                        // Create all the other vertices, constructor w/o weight specification auto defaults to infinity
         for(Point p : mazeGraph.vertexSet()) {
-            if (!p.equals(start)) {
+            if (!p.equals(start)) {                                               // Don't add the starting vertex again
                 PQPointAdapter current = new PQPointAdapter(p);
                 cloud.put(p, current.getShortestDist());
                 pQueue.offer(current);
@@ -127,6 +129,8 @@ public class DijkstraSolve implements SolvingStrategy {
         }
     }
 
+    /* Cycles through the backtrack map to reconstruct the solution route.
+     */
     private List<Point> getSolutionPoints(Map<Point, Point> backtrack, Point start, Point end) {
         List<Point> solutionPoints = new LinkedList<>();
         List<Pair<Point, Point>> solutionEdges = new LinkedList<>();
@@ -144,11 +148,13 @@ public class DijkstraSolve implements SolvingStrategy {
         for (Pair<Point, Point> edge : solutionEdges) {
             solutionPoints.addAll(getPointsFromEdge(edge));
         }
-        solutionPoints.add(end);
+        solutionPoints.add(end);                     // Explicitly add end and line algorithm doesn't include this point
 
         return solutionPoints;
     }
 
+    /* Walks through the edges taken list in order to reconstruct the general route.
+     */
     private List<Point> getPointsExplored(List<Pair<Point, Point>> edges) {
         List<Point> points = new LinkedList<>();
 
@@ -159,27 +165,29 @@ public class DijkstraSolve implements SolvingStrategy {
         return points;
     }
 
-    // DDA Algorithm: https://www.tutorialspoint.com/computer_graphics/line_generation_algorithm.htm
+    /* Responsible for returning the list of x/y points that make up an edge.
+     * DDA Algorithm: https://www.tutorialspoint.com/computer_graphics/line_generation_algorithm.htm
+     */
     private List<Point> getPointsFromEdge(Pair<Point, Point> edge) {
         List<Point> inbetweeners = new LinkedList<>();
         Point source = edge.getKey();
         Point dest = edge.getValue();
-
+                                                                                     // Calc diff between two end points
         int dx = dest.x - source.x;
         int dy = dest.y - source.y;
-        int steps;
 
+        int steps;                                                // Identify the num of steps needed to create the line
         if (Math.abs(dx) > Math.abs(dy)) {
             steps = Math.abs(dx);
         } else {
             steps = Math.abs(dy);
         }
-
+                                                                     // Calculate the increment to apply to both x and y
         int x = source.x;
         double xIncrement = dx / (double) steps;
         int y = source.y;
         double yIncrement = dy / (double) steps;
-
+                                                   // Simply increment the start point "steps" times and record each one
         for (int i = 0; i < steps; i++) {
             x += xIncrement;
             y += yIncrement;

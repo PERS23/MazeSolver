@@ -64,7 +64,7 @@ public class MazeImageBuilder {
         mSolutionHighlights[y][x] = false;
         fillCell(x, y, mHighlightColor, mNormalHighlights);
     }
-
+                                      // Highlights parameter is used to determine how to fill the surrounding wall gaps
     private void fillCell(int x, int y, Paint color, final boolean[][] highlights) {
                                                              // Grab the upper left hand corner of the cell in the image
         int imageX = mWallSize + x * (mCorridorSize + mWallSize);

@@ -4,8 +4,11 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
@@ -15,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
@@ -24,11 +28,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class MainController implements Initializable {
 
     private static final int BASE_ANIMATION_SPEED_MS = 50;
 
-    private ControllerSettings mSettings;
+    private ResourceBundle mResourceBundle;
+    private Settings mSettings;
     // Variables regarding the maze and its generation/solution
     private GenPolicy mCurrentGenStrategy;
     private MazeCreationService mCreationService;
@@ -63,11 +68,11 @@ public class Controller implements Initializable {
     @FXML private Slider speed_slider;
     @FXML private Label current_speed_indicator;
 
-    public Controller() {
+    public MainController() {
         mCurrentSolvingStrategy = SolvingPolicy.DFS;
         mCurrentGenStrategy = GenPolicy.RECURSIVE_BACKTRACK;
 
-        mSettings = new ControllerSettings();
+        mSettings = new Settings();
 
         mStepBack = new ImageView(new Image("img/ic_step_back.png"));
         mStepBack.setFitHeight(30);
@@ -92,6 +97,7 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        mResourceBundle = resources;
         speed_slider.valueProperty().addListener((observable, oldValue, newValue) -> {
             double scaledDown = ((Double) newValue) / 100;
             current_speed_indicator.setText(String.format("%.2fx", scaledDown));
@@ -299,20 +305,31 @@ public class Controller implements Initializable {
 
     @FXML
     public void handleSolveMazeButton() {
-        stopAnimation();
-        disablePlaybackControls();
-        solveCurrentMaze(mSettings.getStartPoint(), mSettings.getEndPoint());
+        if (mCurrentMaze != null) {
+            stopAnimation();
+            disablePlaybackControls();
+            solveCurrentMaze(mSettings.getStartPoint(), mSettings.getEndPoint());
+        }
     }
 
     private void solveCurrentMaze(Point start, Point end) {
-        if (mCurrentMaze != mSolutionService.getTarget()) {   // If current maze is not equal to what service is holding
+        if (mCurrentMaze != mSolutionService.getTarget()) {      // If current maze is not equal to what service has
             mSolutionService.setTarget(mCurrentMaze);
         }
-                                                  // If the current strategy is not equal to what the service is holding
+        // If the current strategy is not equal to what the service is holding
         if (mCurrentSolvingStrategy != mSolutionService.getStrategyChoice()) {
             mSolutionService.setStrategyChoice(mCurrentSolvingStrategy);
         }
-        mSolutionService.setPoints(start, end);                                              // Update the target points
+        mSolutionService.setPoints(start, end);                                          // Update the target points
         mSolutionService.restart();
+    }
+
+    @FXML
+    public void createSettingsDialogue() {
+        SettingsDialogue dialogue = new SettingsDialogue(mSettings);
+        Stage stage = new Stage();
+        stage.setTitle(mResourceBundle.getString("settings_button_text"));
+        stage.setScene(new Scene(dialogue));
+        stage.show();
     }
 }
